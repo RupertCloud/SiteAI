@@ -143,6 +143,32 @@ Priority: **M** = must have for v1, **S** = should have, **C** = could have late
 
 ### 4.1 Installation and onboarding
 
+The whole path from signup to a working assistant, with no engineering beyond pasting one line:
+
+1. **Sign up.** Owner creates an account with email or SSO.
+2. **Add a site.** Owner enters the domain. One account can hold several sites.
+3. **Get the snippet.** The dashboard shows a one-line `<script>` tag carrying that site's key.
+4. **Install it.** Paste the line into the site's global template — the layout, header partial or theme file that every page already renders — or use a one-click install from a CMS or tag manager (FR-46).
+5. **Verify.** The dashboard confirms the script is live, the domain is verified and the CSP allows our domains, and names anything missing (FR-47).
+6. **Map.** The mapper crawls the site; the owner reviews and approves the Site Map.
+7. **Brand and go live.** Owner names the assistant, sets guarded actions and limits, and enables it.
+
+```mermaid
+flowchart LR
+  S1[Sign up] --> S2[Add site<br/>+ domain]
+  S2 --> S3[Copy snippet]
+  S3 --> S4[Paste into<br/>global template]
+  S4 --> S5{Verified?}
+  S5 -- no --> S6[Dashboard names<br/>what is missing]
+  S6 --> S4
+  S5 -- yes --> S7[Map site]
+  S7 --> S8[Owner approves<br/>Site Map]
+  S8 --> S9[Brand + enable]
+  S9 --> S10((Live))
+```
+
+Nothing about how the site is served changes. The snippet loads in the visitor's browser and renders an overlay above the host page; traffic is never proxied through us, and no build step, redeploy or backend change is required.
+
 | ID | Requirement | Priority |
 | --- | --- | --- |
 | FR-1 | Owner signs up and gets a site key and a one-line script tag. | M |
@@ -154,6 +180,9 @@ Priority: **M** = must have for v1, **S** = should have, **C** = could have late
 | FR-47 | Guided setup checks the script is live, the domain is verified and the CSP allows our domains, and reports what is missing in plain language. | M |
 | FR-48 | Uninstall is one step and leaves no trace on the host site. | M |
 | FR-49 | Owner can disable the assistant instantly across all pages from the dashboard, without touching the host site. | M |
+| FR-72 | One account holds many sites, each with its own site key, Site Map, branding, guarded actions and limits. | M |
+| FR-73 | The snippet is identical on every page. The assistant requires no per-page markup, data attributes, route configuration or build step. | M |
+| FR-74 | The assistant renders as an overlay above the host page and never alters the host DOM except through the steps a task performs. | M |
 
 ### 4.2 Site mapping
 
